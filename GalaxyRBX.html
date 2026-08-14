@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Galaxy Robux Generator</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+margin: 0;
+min-height: 100vh;
+display: grid;
+place-items: center;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+color: #e0e0e0;
+background: radial-gradient(circle at top, #4a00e0, #8e2de2 60%);
+}
+
+.card {
+width: min(92vw, 460px);
+overflow: hidden;
+border: 1px solid #7b68ee;
+border-radius: 18px;
+background: rgba(28, 35, 68, 0.8);
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+}
+
+main {
+padding: 28px;
+text-align: center;
+}
+
+h1 {
+margin: 0 0 8px;
+font-size: 1.7rem;
+color: #ffffff;
+text-shadow: 0 0 10px #8e2de2, 0 0 20px #4a00e0;
+}
+
+p {
+color: #c0c0c0;
+line-height: 1.5;
+}
+
+.amounts {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 10px;
+margin: 24px 0;
+}
+
+button {
+border: 0;
+border-radius: 10px;
+padding: 13px 8px;
+cursor: pointer;
+font: inherit;
+font-weight: 700;
+color: #fff;
+background: linear-gradient(45deg, #8e2de2, #4a00e0);
+transition: all 0.3s ease;
+}
+
+button:hover,
+button.selected {
+background: linear-gradient(45deg, #4a00e0, #8e2de2);
+box-shadow: 0 0 15px #8e2de2;
+}
+
+button:disabled {
+cursor: not-allowed;
+opacity: 0.65;
+}
+
+#start {
+width: 100%;
+background: linear-gradient(45deg, #21b778, #00d48a);
+font-size: 1rem;
+}
+
+#start:hover:not(:disabled) {
+background: linear-gradient(45deg, #2ed18d, #00ff9a);
+}
+
+.status {
+min-height: 54px;
+margin-top: 22px;
+padding: 15px;
+border-radius: 10px;
+background: rgba(17, 23, 47, 0.7);
+color: #dce3ff;
+font-weight: 700;
+border: 1px solid #4a00e0;
+}
+
+.note {
+margin-top: 18px;
+font-size: 0.82rem;
+color: #aab5e8;
+}
+
+code {
+	display: inline-block;
+	margin-top: 8px;
+	padding: 7px 10px;
+	border-radius: 6px;
+	background: rgba(8, 12, 29, 0.7);
+	color: #8affc1;
+	font-family: Consolas, monospace;
+	letter-spacing: 1px;
+	text-shadow: 0 0 5px #8affc1;
+}
+</style>
+</head>
+<body>
+<section class="card">
+<main>
+<h1>Galaxy Robux Generator</h1>
+<p>Select an amount to generate Robux.</p>
+
+<div class="amounts">
+<button class="amount" data-amount="500">500 Robux</button>
+<button class="amount" data-amount="5,000">5,000 Robux</button>
+<button class="amount" data-amount="10,000">10,000 Robux</button>
+</div>
+
+<button id="start" disabled>Generate Robux</button>
+
+<div class="status" id="status" aria-live="polite">
+Select an amount to begin.
+</div>
+
+<p class="note">
+
+</p>
+</main>
+</section>
+
+<script>
+const buttons = document.querySelectorAll(".amount");
+const start = document.getElementById("start");
+const status = document.getElementById("status");
+let selectedAmount = null;
+
+function makeSampleCode() {
+const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const group = () =>
+Array.from(
+{ length: 4 },
+() => characters[Math.floor(Math.random() * characters.length)]
+).join("");
+
+return `E5JX-${group()}-${group()}`;
+}
+
+buttons.forEach((button) => {
+button.addEventListener("click", () => {
+buttons.forEach((item) => item.classList.remove("selected"));
+button.classList.add("selected");
+
+selectedAmount = button.dataset.amount;
+start.disabled = false;
+status.textContent = `${selectedAmount} Robux Selected.`;
+});
+});
+
+start.addEventListener("click", async () => {
+start.disabled = true;
+buttons.forEach((button) => {
+button.disabled = true;
+});
+
+status.textContent = "Creating Code...";
+await new Promise((resolve) => setTimeout(resolve, 1000));
+
+const sampleCode = makeSampleCode();
+
+status.innerHTML = `
+Robux Code For ${selectedAmount} Robux:<br>
+<code>${sampleCode}</code><br><br>
+Enter this code at www.roblox.com/redeem.
+`;
+
+buttons.forEach((button) => {
+button.disabled = false;
+});
+
+start.disabled = false;
+});
+</script>
+</body>
+</html>
